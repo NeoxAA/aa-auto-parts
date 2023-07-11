@@ -1,0 +1,13 @@
+Category:
+title
+description
+url
+
+Part:
+name
+image
+category
+company
+position
+price
+sku
