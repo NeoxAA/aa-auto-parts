@@ -9,18 +9,18 @@ const logger = require('morgan');
 
 const app = express();
 
-// const mongoose = require("mongoose");
-// mongoose.set("strictQuery", false);
-// const mongoDB = process.env.MONGO_DB_CONNECTION;
+const mongoose = require("mongoose");
+mongoose.set("strictQuery", false);
+const mongoDB = process.env.MONGO_DB_CONNECTION;
 
-// main().catch((err) => console.log(err));
-// async function main() {
-//     await mongoose.connect(mongoDB);
-// }
+main().catch((err) => console.log(err));
+async function main() {
+    await mongoose.connect(mongoDB);
+}
 
 const indexRouter = require('./routes/index');
 const partsRouter = require('./routes/parts');
-const catalogRouter = require('./routes/catalog');
+const categoryRouter = require('./routes/category');
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -33,6 +33,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/parts', partsRouter);
-app.use('/catalog', catalogRouter);
+app.use('/category', categoryRouter);
 
 module.exports = app;
