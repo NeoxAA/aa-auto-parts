@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  h1 #{title}
+  p #{description}
+  h2 Parts
+  ul 
+    each part in category_parts
+        li 
+            h3= part.name
+            p Image: part.image
+            p Company: part.company
+            p Price: part.price 
+            p SKU: part.sku

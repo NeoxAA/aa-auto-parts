@@ -19,8 +19,6 @@ async function main() {
 }
 
 const indexRouter = require('./routes/index');
-const partsRouter = require('./routes/parts');
-const categoryRouter = require('./routes/category');
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -32,7 +30,5 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/parts', partsRouter);
-app.use('/category', categoryRouter);
 
 module.exports = app;
