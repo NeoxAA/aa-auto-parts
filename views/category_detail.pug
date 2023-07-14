@@ -1,14 +1,19 @@
 extends layout
 
 block content
-  h1 #{title}
-  p #{description}
+  h1 #{category.name}
+  p #{category.description}
   h2 Parts
   ul 
     each part in category_parts
         li 
             h3= part.name
-            p Image: part.image
-            p Company: part.company
-            p Price: part.price 
-            p SKU: part.sku
+            p Image: #{part.image}
+            p Company: #{part.company}
+            p Price: #{part.price}
+            p SKU: #{part.sku}
+              hr
+  p
+    a(href=category.slug+'/update') Update category
+  p
+    a(href=category.slug+'/delete') Delete category

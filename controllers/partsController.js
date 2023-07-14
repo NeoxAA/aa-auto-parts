@@ -103,7 +103,7 @@ exports.part_create_post = [
         
 
             for (const category of allCategories) {
-                if (part.category.indexOf(category._id) > -1){
+                if (Array.isArray(part.category) && part.category.indexOf(category._id) > -1){
                     category.checked = "true";
                 }
             }
