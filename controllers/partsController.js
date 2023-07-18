@@ -2,21 +2,26 @@ const Part = require("../models/part");
 const Category = require("../models/category");
 const { body, validationResult } = require("express-validator");
 const asyncHandler = require("express-async-handler");
+const part = require("../models/part");
 
 
 exports.index = asyncHandler(async (req, res, next) => {
     const [
         numParts,
-        numCategories
+        numCategories,
+        allParts,
+        allCategories
     ] = await Promise.all([
         Part.countDocuments({}).exec(),
-        Category.countDocuments({}).exec()
+        Category.countDocuments({}).exec(),
+        Part.find({}).sort({title:1}).populate("category").exec(),
     ]);
 
     res.render("index", {
         title: "AA Auto Parts",
         parts_count: numParts,
         category_count: numCategories,
+        all_parts: allParts
     });
 });
 
@@ -37,7 +42,8 @@ exports.part_detail = asyncHandler(async (req, res, next) => {
         category: part.category,
         company: part.company,
         price: part.price,
-        sku: part.sku
+        sku: part.sku,
+        slug: part.slug,
     });
 })
 
@@ -125,3 +131,52 @@ exports.part_create_post = [
         }
     }),
 ];
+
+exports.part_delete_get = asyncHandler(async (req, res, next) => {
+
+    const part = await Part.findOne({slug: req.params.slug}).populate("category").exec();
+
+    if (part === null) {
+        const err = new Error("Part not found");
+        err.status = 404;
+        return next(err);
+    }
+
+    res.render("delete_part", {
+        title: "Delete Part",
+        part: part,
+        errors: [],
+    })
+})
+
+exports.part_delete_post = asyncHandler(async (req, res, next) => {
+
+    const part = await Part.findOne({slug: req.params.slug}).exec();
+
+    if (part === null) {
+        const err = new Error("Part not found");
+        err.status = 404;
+        return next(err);
+    } else{
+
+        await Part.findByIdAndDelete(req.body.partid)
+        res.redirect("/");
+    }
+})
+
+exports.part_update_get = asyncHandler(async (req, res, next) => {
+
+    const part = await Part.findOne({slug: req.params.slug}).exec();
+
+    if (part === null) {
+        const err = new Error("Part not found");
+        err.status = 404;
+        return next(err);
+    }
+
+    res.render("part_form", {
+        title: "Update Part",
+        part: part,
+        errors: [],
+    })
+})

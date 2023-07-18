@@ -2,5 +2,13 @@ extends layout
 
 block content
   h1= title
+  each part in all_parts
+    li 
+        h3= part.name
+        p Image: #{part.image}
+        p Company: #{part.company}
+        p Price: #{part.price}
+        p SKU: #{part.sku}
+        a(href="/part/"+part.slug) View part
   p #{parts_count}
   p #{category_count}

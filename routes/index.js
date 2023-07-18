@@ -10,6 +10,8 @@ router.get("/", parts_controller.index);
 router.get("/part/create", parts_controller.part_create_get);
 router.post("/part/create", parts_controller.part_create_post);
 router.get("/part/:slug", parts_controller.part_detail);
+router.get("/part/:slug/delete", parts_controller.part_delete_get);
+router.post("/part/:slug/delete", parts_controller.part_delete_post);
 
 router.get("/category/create", category_controller.category_create_get);
 router.post("/category/create", category_controller.category_create_post);
