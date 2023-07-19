@@ -5,9 +5,18 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const path = require('path');
 const logger = require('morgan');
-
+const fileUpload = require('express-fileupload');
 
 const app = express();
+
+app.use(
+    fileUpload({
+        limits: {
+            fileSize: 1000000,
+        },
+        abortOnLimit: true,
+    })
+);
 
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);

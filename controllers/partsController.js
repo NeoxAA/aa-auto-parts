@@ -14,13 +14,15 @@ exports.index = asyncHandler(async (req, res, next) => {
         Part.countDocuments({}).exec(),
         Category.countDocuments({}).exec(),
         Part.find({}).sort({title:1}).populate("category").exec(),
+        Category.find().exec(),
     ]);
 
     res.render("index", {
         title: "AA Auto Parts",
         parts_count: numParts,
         category_count: numCategories,
-        all_parts: allParts
+        all_parts: allParts,
+        all_categories: allCategories,
     });
 });
 
@@ -249,11 +251,10 @@ exports.part_update_post = [
             res.render("part_form", {
                 title: "Update Part",
                 categories: allCategories,
-                part: part,
+                part: partUpdate,
                 errors: errors.array(),
             });
         } else {
-            console.log("hereeee", req.params.id)
             const thePart = await Part.findOneAndUpdate({_id: req.body.partid}, partUpdate, {new: true});
 
             res.redirect(thePart.url);
