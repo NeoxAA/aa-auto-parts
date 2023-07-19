@@ -169,7 +169,6 @@ exports.category_update_post = [
             return;
         } else{
             const theCategory = await Category.findOneAndUpdate({_id: req.body.categoryid}, category, {new: true});
-            console.log(theCategory);
             res.redirect(theCategory.url);
         }
     }),
