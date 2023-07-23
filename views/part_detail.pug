@@ -3,7 +3,7 @@ extends layout
 block content
   h1= title
   p #{name}
-  p #{image}
+  img(src=`/images/uploads/${image}`, alt=`${company + " " + name + " product image"}` )
   p #{category.name}
   p #{company}
   p #{price}

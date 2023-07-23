@@ -3,6 +3,8 @@ const Category = require("../models/category");
 const { body, validationResult } = require("express-validator");
 const asyncHandler = require("express-async-handler");
 const slugify = require('slugify');
+const fs = require('fs');
+const path = require('path');
 
 exports.index = asyncHandler(async (req, res, next) => {
     const [
@@ -14,11 +16,11 @@ exports.index = asyncHandler(async (req, res, next) => {
         Part.countDocuments({}).exec(),
         Category.countDocuments({}).exec(),
         Part.find({}).sort({title:1}).populate("category").exec(),
-        Category.find().exec(),
+        Category.find().populate("parts").exec(),
     ]);
 
     res.render("index", {
-        title: "AA Auto Parts",
+        title: "All Parts",
         parts_count: numParts,
         category_count: numCategories,
         all_parts: allParts,
@@ -72,10 +74,6 @@ exports.part_create_post = [
         .trim()
         .isLength({min:1})
         .escape(),
-    body("image", "Image must not be empty.")
-        .trim()
-        .isLength({min:3})
-        .escape(),
     body("category", "Category must not be empty.")
         .trim()
         .isLength({min:3})
@@ -98,7 +96,7 @@ exports.part_create_post = [
 
         const part = new Part({
             name: req.body.name,
-            image: req.body.image,
+            image: req.file.filename,
             category: req.body.category,
             company: req.body.company,
             price: req.body.price,
@@ -127,7 +125,18 @@ exports.part_create_post = [
             if(partExists) {
                 res.redirect(partExists.url);
             }
+
             await part.save();
+
+            const categories = await Category.find({
+                _id: { $in: part.category }
+            });
+
+            for (let category of categories) {
+                category.parts.push(part._id);
+                await category.save();
+            }
+
             res.redirect(part.url);
         }
     }),
@@ -204,10 +213,6 @@ exports.part_update_post = [
         .trim()
         .isLength({min:1})
         .escape(),
-    body("image", "Image must not be empty.")
-        .trim()
-        .isLength({min:3})
-        .escape(),
     body("category", "Category must not be empty.")
         .trim()
         .isLength({min:3})
@@ -230,7 +235,7 @@ exports.part_update_post = [
 
         const partUpdate = {
             name: req.body.name,
-            image: req.body.image,
+            image: req.file.filename,
             category:  typeof req.body.category === "undefined" ? [] : req.body.category,
             company: req.body.company,
             price: req.body.price,
@@ -243,7 +248,7 @@ exports.part_update_post = [
             const allCategories = await Category.find().exec();
 
             for (const category of allCategories) {
-                if (Array.isArray(part.category) && part.category.indexOf(category._id) > -1){
+                if (Array.isArray(partUpdate.category) && partUpdate.category.indexOf(category._id) > -1){
                     category.checked = "true";
                 }
             }
@@ -255,6 +260,17 @@ exports.part_update_post = [
                 errors: errors.array(),
             });
         } else {
+            const existingPart = await Part.findOne({_id: req.body.partid});
+            const existingPartImage = existingPart.image;
+            if (existingPartImage) {
+                const existingPartImagePath = path.join("public/images/uploads/", existingPartImage);
+                fs.unlink(existingPartImagePath, (err) => {
+                        if(err){
+                            console.error(err);
+                            return;
+                        }
+                    })
+            }
             const thePart = await Part.findOneAndUpdate({_id: req.body.partid}, partUpdate, {new: true});
 
             res.redirect(thePart.url);

@@ -10,10 +10,11 @@ block content
         p Price: #{part.price}
         p SKU: #{part.sku}
         a(href="/part/"+part.slug) View part
+
+  each category in all_categories
+    h2 #{category.name}
+    each part in category.parts 
+      p #{part.name}
+    h3 #{category.parts}
   p #{parts_count}
   p #{category_count}
-  hr
-  p 
-    a(href="/part/create") Create Part
-  p 
-    a(href="/category/create") Create Category

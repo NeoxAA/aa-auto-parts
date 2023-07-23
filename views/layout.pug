@@ -7,12 +7,16 @@ html(lang='en')
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
     header(class="header")
-      ul(class="header-menu")
-        li(class="header-menu-item")
-          a(href="/") Home
-        li(class="header-menu-item")
-          a(href="/part/create") Create Part
-        li(class="header-menu-item")
-          a(href="/category/create") Create Category
-    div(class='col-sm-10')
+      div(class="header-container")
+        a(href="/")
+         p AA Auto Parts
+        ul(class="header-menu")
+          li(class="header-menu-item")
+            a(href="/") Home
+        ul(class="header-menu controls-menu")
+          li(class="header-menu-item")
+            a(href="/part/create") Create Part
+          li(class="header-menu-item")
+            a(href="/category/create") Create Category
+    main(class='main-container')
           block content

@@ -4,14 +4,14 @@ block content
   if categories.length
     h1= title
 
-    form(method="POST" action='')
+    form(method="POST" action='' enctype="multipart/form-data")
       div.form-group
         label(for='name') Name: 
         input#name.form-control(type='text', placeholder="Name of part" name='name' required='true' value=(undefined===part ? '' :part.name))
         
       div.form-group
-        label(for='image') Image URL: 
-        input#image.form-control(type='text', placeholder="Image URL" name='image' required='true' value=(undefined===part ? '' :part.image))
+        label(for='image') Image: 
+        input#image.form-control(type='file', accept='image/*' name='image' required='true' value=(undefined===part ? '' :part.image))
 
       div.form-group
         label Category:
