@@ -258,7 +258,6 @@ exports.part_update_post = [
             slug: slugify(req.body.company + '-' + req.body.name, {lower:true, strict:true}),
             _id: req.params.partid,
         };
-
         
         const allCategories = await Category.find().exec();
 
@@ -297,16 +296,11 @@ exports.part_update_post = [
             const addToCategories = [...newCategories].filter(id => !existingCategories.has(id));
             const removeFromCategories = [...existingCategories].filter(id => !newCategories.has(id));
 
-            console.log("add to cat: ", addToCategories);
-            console.log("remove from cat: ", removeFromCategories);
-
             for (const categoryId of addToCategories) {
-                const updatedCategory = await Category.findByIdAndUpdate(categoryId, { $addToSet: { parts: req.body.partid}}, { new: true });
-                console.log(updatedCategory);
+                await Category.findByIdAndUpdate(categoryId, { $addToSet: { parts: req.body.partid}}, { new: true });
             }
             for (const categoryId of removeFromCategories) {
-                const updatedCategory = await Category.findByIdAndUpdate(categoryId, { $pull: { parts: req.body.partid}}, { new: true });
-                console.log(updatedCategory);
+                await Category.findByIdAndUpdate(categoryId, { $pull: { parts: req.body.partid}}, { new: true });
             }
 
             const thePart = await Part.findOneAndUpdate({_id: req.body.partid}, partUpdate, {new: true});
