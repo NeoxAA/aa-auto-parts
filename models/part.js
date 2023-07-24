@@ -5,7 +5,7 @@ const slugify = require('slugify');
 const PartsSchema = new Schema({
     name: {type: String, required: true},
     image: {type: String, required: true},
-    category: {type: Schema.Types.ObjectId, ref: "Category", required: true},
+    category: [{type: Schema.Types.ObjectId, ref: "Category", required: true}],
     company: {type: String, required: true},
     price: {type: Number, required: true},
     sku: {type: String, required: true},

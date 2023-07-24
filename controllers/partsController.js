@@ -161,15 +161,28 @@ exports.part_delete_get = asyncHandler(async (req, res, next) => {
 
 exports.part_delete_post = asyncHandler(async (req, res, next) => {
 
-    const part = await Part.findOne({slug: req.params.slug}).exec();
+    const part = await Part.findOne({slug: req.params.slug}).populate("category").exec();
 
     if (part === null) {
         const err = new Error("Part not found");
         err.status = 404;
         return next(err);
     } else{
+        for (const category of part.category) {
+            await Category.findByIdAndUpdate(category._id, { $pull: { parts: part._id}});
+        }
 
-        await Part.findByIdAndDelete(req.body.partid)
+        if (part.image) {
+            const partImagePath = path.join("public/images/uploads/", part.image);
+            fs.unlink(partImagePath, (err) => {
+                    if(err){
+                        console.error(err);
+                        return;
+                    }
+                })
+        }
+
+        await Part.findByIdAndDelete(req.body.partid);
         res.redirect("/");
     }
 })
@@ -186,8 +199,10 @@ exports.part_update_get = asyncHandler(async (req, res, next) => {
     }
 
     for (const category of allCategories) {
-        if (part.category.equals(category._id)) {
-            category.checked = "true";
+        for (const partCategories of part.category){
+            if (partCategories._id.equals(category._id)) {
+                category.checked = "true";
+            }
         }
     }
 
@@ -213,9 +228,9 @@ exports.part_update_post = [
         .trim()
         .isLength({min:1})
         .escape(),
-    body("category", "Category must not be empty.")
-        .trim()
-        .isLength({min:3})
+    body("category")
+        .exists()
+        .withMessage("Category is required.")
         .escape(),
     body("company", "Company needs to be specified.")
         .trim()
@@ -244,8 +259,10 @@ exports.part_update_post = [
             _id: req.params.partid,
         };
 
+        
+        const allCategories = await Category.find().exec();
+
         if(!errors.isEmpty()) {
-            const allCategories = await Category.find().exec();
 
             for (const category of allCategories) {
                 if (Array.isArray(partUpdate.category) && partUpdate.category.indexOf(category._id) > -1){
@@ -259,9 +276,11 @@ exports.part_update_post = [
                 part: partUpdate,
                 errors: errors.array(),
             });
+
         } else {
             const existingPart = await Part.findOne({_id: req.body.partid});
             const existingPartImage = existingPart.image;
+
             if (existingPartImage) {
                 const existingPartImagePath = path.join("public/images/uploads/", existingPartImage);
                 fs.unlink(existingPartImagePath, (err) => {
@@ -271,6 +290,25 @@ exports.part_update_post = [
                         }
                     })
             }
+
+            const existingCategories = new Set(existingPart.category.map(category => category._id.toString()));
+            const newCategories = new Set(partUpdate.category);
+
+            const addToCategories = [...newCategories].filter(id => !existingCategories.has(id));
+            const removeFromCategories = [...existingCategories].filter(id => !newCategories.has(id));
+
+            console.log("add to cat: ", addToCategories);
+            console.log("remove from cat: ", removeFromCategories);
+
+            for (const categoryId of addToCategories) {
+                const updatedCategory = await Category.findByIdAndUpdate(categoryId, { $addToSet: { parts: req.body.partid}}, { new: true });
+                console.log(updatedCategory);
+            }
+            for (const categoryId of removeFromCategories) {
+                const updatedCategory = await Category.findByIdAndUpdate(categoryId, { $pull: { parts: req.body.partid}}, { new: true });
+                console.log(updatedCategory);
+            }
+
             const thePart = await Part.findOneAndUpdate({_id: req.body.partid}, partUpdate, {new: true});
 
             res.redirect(thePart.url);
