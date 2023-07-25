@@ -1,7 +1,19 @@
 const asyncHandler = require("express-async-handler");
+const Part = require("../models/part");
+const Category = require("../models/category");
 
 exports.index = asyncHandler(async (req, res, next) => {
-    res.render("index", {
-      title: "AA Auto Parts",
-    });
+  const [
+      allParts,
+      allCategories
+  ] = await Promise.all([
+      Part.find({}).sort({title:1}).populate("category").exec(),
+      Category.find().populate("parts").exec(),
+  ]);
+
+  res.render("index", {
+      title: "Your Parts Super Store",
+      all_parts: allParts,
+      all_categories: allCategories,
   });
+});

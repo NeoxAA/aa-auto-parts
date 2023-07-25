@@ -6,29 +6,6 @@ const slugify = require('slugify');
 const fs = require('fs');
 const path = require('path');
 
-exports.index = asyncHandler(async (req, res, next) => {
-    const [
-        numParts,
-        numCategories,
-        allParts,
-        allCategories
-    ] = await Promise.all([
-        Part.countDocuments({}).exec(),
-        Category.countDocuments({}).exec(),
-        Part.find({}).sort({title:1}).populate("category").exec(),
-        Category.find().populate("parts").exec(),
-    ]);
-
-    res.render("index", {
-        title: "All Parts",
-        parts_count: numParts,
-        category_count: numCategories,
-        all_parts: allParts,
-        all_categories: allCategories,
-    });
-});
-
-
 exports.part_detail = asyncHandler(async (req, res, next) => {
 
     const part = await Part.findOne({slug: req.params.slug}).populate("category").exec();
@@ -232,9 +209,9 @@ exports.part_update_post = [
         .exists()
         .withMessage("Category is required.")
         .escape(),
-    body("company", "Company needs to be specified.")
+    body("company", "Company needs to be specified and longer than one letter.")
         .trim()
-        .isLength({min:3})
+        .isLength({min:2})
         .escape(),
     body("price", "Price needs to be added.")
         .trim()

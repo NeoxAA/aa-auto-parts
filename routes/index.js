@@ -2,10 +2,11 @@ const express = require('express');
 const router = express.Router();
 const parts_controller = require("../controllers/partsController");
 const category_controller = require("../controllers/categoryController");
-const multer  = require('multer');
+const home_controller = require("../controllers/homeController");
+const multer = require('multer');
 const upload = multer({ dest: './public/images/uploads/' });
 
-router.get("/", parts_controller.index);
+router.get("/", home_controller.index);
 
 router.get("/part/create", parts_controller.part_create_get);
 router.post("/part/create", upload.single('image'), parts_controller.part_create_post);

@@ -1,20 +1,35 @@
 extends layout
 
 block content
-  h1= title
-  each part in all_parts
-    li 
-        h3= part.name
-        p Image: #{part.image}
-        p Company: #{part.company}
-        p Price: #{part.price}
-        p SKU: #{part.sku}
-        a(href="/part/"+part.slug) View part
-
-  each category in all_categories
-    h2 #{category.name}
-    each part in category.parts 
-      p #{part.name}
-    h3 #{category.parts}
-  p #{parts_count}
-  p #{category_count}
+  div(class="heading-one-wrapper")
+    h1= title
+  div(class="main-wrapper")
+    if all_categories.length
+      h2 Browse by Category
+      div(class="browse-category-container")
+        each category in all_categories
+            a(href="/category/"+category.slug)
+              h3(class="browse-category-heading") #{category.name}
+      each category in all_categories
+        div(class="category-container")
+          h2(class="category-heading") #{category.name}
+          a(href="/category/"+category.slug) View Category
+        div(class="parts-container")
+          each part in category.parts
+            div(class="part-card")
+              div(class="part-card-inner")
+            
+                a(class="part-card-image-link" href="/part/"+part.slug)
+                  img(src=`/images/uploads/${part.image}`, alt=`${part.company + " " + part.name + " product image"}` )
+                div(class="part-card-info")
+                  h3 #{part.name}
+                  p
+                    strong Company: 
+                    | #{part.company}
+                  p $#{part.price}
+                  p(class="part-number") Part # #{part.sku}
+                a(class="part-card-link" href="/part/"+part.slug) VIEW PART
+    else
+      p Need to add a category first
+      a(href="/category/create") Add category
+    
