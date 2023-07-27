@@ -1,16 +1,21 @@
 extends layout
 
 block content
-  h1= title
-  p #{name}
-  img(src=`/images/uploads/${image}`, alt=`${company + " " + name + " product image"}` )
-  p Category: #{category}
-  p Company: #{company}
-  p #{price}
-  p #{sku}
+  div(class="main-wrapper")
+    div(class="part-detail-container")
+      div(class="part-detail-image")
+        img(src=`/images/uploads/${image}`, alt=`${company + " " + name + " product image"}` )
+      div(class="part-detail-info")
+        h1 #{name}
+        div(class="part-detail-categories")
+          each cat in category
+            span #{cat.name} 
+        p #[strong Company:] #{company}
+        p #[strong Price:] $#{price}
+        p #[strong Part] # #{sku}
 
-  hr
-  p
-    a(href=slug+'/update') Update part
-  p
-    a(href=slug+'/delete') Delete part
+    hr
+
+    div(class="update-delete-link-container")
+      a(class="update-delete-links" href=slug+'/update') Update part
+      a(class="update-delete-links" href=slug+'/delete') Delete part

@@ -8,7 +8,7 @@ exports.index = asyncHandler(async (req, res, next) => {
       allCategories
   ] = await Promise.all([
       Part.find({}).sort({title:1}).populate("category").exec(),
-      Category.find().populate("parts").exec(),
+      Category.find().sort({name: 1}).populate("parts").exec(),
   ]);
 
   res.render("index", {

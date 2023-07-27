@@ -1,10 +1,12 @@
 extends layout
 
 block content
-  h1= title
-  ul
-    each category in categories
-        li 
-            h2= category.tile
-            p Description: #{category.description}
+  div(class="heading-one-wrapper")
+      h1= title
+  div(class="main-wrapper")
+    ul
+      each category in categories
+          li 
+              h2= category.tile
+              p Description: #{category.description}
     

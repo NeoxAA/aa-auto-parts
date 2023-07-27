@@ -12,6 +12,8 @@ exports.category_list = asyncHandler(async (req, res, next) => {
     })
 });
 
+
+
 exports.category_detail = asyncHandler(async (req, res, next) => {
     const category = await Category.findOne({ slug: req.params.slug }).exec();
 
@@ -21,11 +23,10 @@ exports.category_detail = asyncHandler(async (req, res, next) => {
         return next(err);
     }
 
-    const partsInCategory = await Part.find({ category: category._id}, "name image company price sku").exec();
+    const partsInCategory = await Part.find({ category: category._id}, "name image company price sku slug").exec();
 
     res.render('category_detail', {
-        title: category.name,
-        description: category.description,
+        category: category,
         category_parts: partsInCategory,
     });
 });
@@ -72,22 +73,7 @@ exports.category_create_post = [
     }),
 ]
 
-exports.category_detail = asyncHandler(async (req, res, next) => {
-    const category = await Category.findOne({ slug: req.params.slug }).exec();
 
-    if (category === null) {
-        const err = new Error("Category not found.");
-        err.status = 404;
-        return next(err);
-    }
-
-    const partsInCategory = await Part.find({ category: category._id}, "name image company price sku").exec();
-
-    res.render('category_detail', {
-        category: category,
-        category_parts: partsInCategory,
-    });
-});
 
 
 exports.category_delete_get = asyncHandler(async (req, res, next) => {

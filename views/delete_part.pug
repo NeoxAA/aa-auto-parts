@@ -14,6 +14,6 @@ block content
 
   form(method='POST' action='/part/' + part.slug + '/delete')
     div.form-group
-    input#partid.form-control(type='hidden',name='partid', required='true', value=part._id )
+    input#partid(type='hidden',name='partid', required='true', value=part._id )
 
-    button.btn.btn-primary(type='submit') Delete
+    button.submit-button(type='submit') Delete

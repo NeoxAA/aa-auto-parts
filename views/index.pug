@@ -9,10 +9,10 @@ block content
       div(class="browse-category-container")
         each category in all_categories
             a(href="/category/"+category.slug)
-              h3(class="browse-category-heading") #{category.name}
+              h3(class="browse-category-heading")!= category.name
       each category in all_categories
         div(class="category-container")
-          h2(class="category-heading") #{category.name}
+          h2(class="category-heading")!= category.name
           a(href="/category/"+category.slug) View Category
         div(class="parts-container")
           each part in category.parts
@@ -22,12 +22,12 @@ block content
                 a(class="part-card-image-link" href="/part/"+part.slug)
                   img(src=`/images/uploads/${part.image}`, alt=`${part.company + " " + part.name + " product image"}` )
                 div(class="part-card-info")
-                  h3 #{part.name}
+                  h3!= part.name
                   p
                     strong Company: 
                     | #{part.company}
                   p $#{part.price}
-                  p(class="part-number") Part # #{part.sku}
+                  p(class="part-number") Part #  !{part.sku}
                 a(class="part-card-link" href="/part/"+part.slug) VIEW PART
     else
       p Need to add a category first

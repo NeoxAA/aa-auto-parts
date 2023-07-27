@@ -1,27 +1,30 @@
 extends layout
 
 block content
-  h1 #{title}: #{category.name}
+  div(class="heading-one-wrapper")
+      h1 #{title}: #{category.name}
 
-  if parts.length
+  div(class="main-wrapper")
 
-    p #[strong Delete the following parts before trying to delete this category.]
+    if parts.length
 
-    div(style='margin-left:20px;margin-top:20px')
+      p #[strong Delete the following parts before trying to delete this category.]
 
-      h3 Parts
+      div(style='margin-left:20px;margin-top:20px')
 
-      ul
-      each part in parts
-        li
-          a(href=part.url) #{part.name}
+        h3 Parts
 
-  else
-    p Do you really want to delete this category?
+        ul
+        each part in parts
+          li
+            a(href=part.url) #{part.name}
 
-    form(method='POST' action='/category/' + category.slug + '/delete')
-      div.form-group
-        input#categoryid.form-control(type='hidden',name='categoryid', required='true', value=category._id )
+    else
+      p Do you really want to delete this category?
 
-      button.btn.btn-primary(type='submit') Delete
+      form(method='POST' action='/category/' + category.slug + '/delete')
+        div.form-group
+          input#categoryid(type='hidden',name='categoryid', required='true', value=category._id )
+
+        button.submit-button(type='submit') Delete
 
