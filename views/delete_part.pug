@@ -1,19 +1,25 @@
 extends layout
 
 block content
-  h1= title
-  p #{part.name}
-  p #{part.image}
-  p #{part.company}
-  p #{part.category.name}
-  p #{part.price}
-  p #{part.sku}
+  div(class="main-wrapper")
+    div(class="part-detail-container")
+      div(class="part-detail-image")
+        img(src=`/images/uploads/${part.image}`, alt=`${part.company + " " + part.name + " product image"}` )
+      div(class="part-detail-info")
+        h1 #{part.name}
+        div(class="part-detail-categories")
+          each cat in part.category
+            span(class="part-detail-category-span") !{cat.name}
+        p #[strong Company:] #{part.company}
+        p #[strong Price:] $#{part.price}
+        p #[strong Part] # #{part.sku}
 
-  hr
-  p Do you really want to delete this part?
 
-  form(method='POST' action='/part/' + part.slug + '/delete')
-    div.form-group
-    input#partid(type='hidden',name='partid', required='true', value=part._id )
+    hr
+    p Do you really want to delete this part?
 
-    button.submit-button(type='submit') Delete
+    form(method='POST' action='/part/' + part.slug + '/delete')
+      div.form-group
+      input#partid(type='hidden',name='partid', required='true', value=part._id )
+
+      button.submit-button(type='submit') Delete

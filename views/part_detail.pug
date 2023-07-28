@@ -9,7 +9,7 @@ block content
         h1 #{name}
         div(class="part-detail-categories")
           each cat in category
-            span #{cat.name} 
+            span(class="part-detail-category-span") !{cat.name}
         p #[strong Company:] #{company}
         p #[strong Price:] $#{price}
         p #[strong Part] # #{sku}

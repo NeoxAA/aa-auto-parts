@@ -4,9 +4,11 @@ block content
   div(class="heading-one-wrapper")
       h1= title
   div(class="main-wrapper")
-    ul
-      each category in categories
-          li 
-              h2= category.tile
-              p Description: #{category.description}
-    
+    if category_list.length
+      div(class="browse-category-container")
+        each category in category_list
+          a(href="/category/"+category.slug)
+            h3(class="browse-category-heading")!= category.name
+    else
+      p Need to add a category first
+      a(href="/category/create") Add category

@@ -2,7 +2,7 @@ extends layout
 
 block content
   div(class="heading-one-wrapper")
-      h1 #{title}: #{category.name}
+      h1 #{title}: !{category.name}
 
   div(class="main-wrapper")
 
@@ -17,7 +17,7 @@ block content
         ul
         each part in parts
           li
-            a(href=part.url) #{part.name}
+            a(href=part.url) !{part.name}
 
     else
       p Do you really want to delete this category?

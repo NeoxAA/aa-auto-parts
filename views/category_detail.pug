@@ -6,22 +6,26 @@ block content
 
   div(class="main-wrapper")
     p!= category.description
-    h2 Parts in #{category.name}
-      div(class="parts-container")
-          each part in category_parts
-            div(class="part-card")
-              div(class="part-card-inner")
-            
-                a(class="part-card-image-link" href="/part/"+part.slug)
-                  img(src=`/images/uploads/${part.image}`, alt=`${part.company + " " + part.name + " product image"}` )
-                div(class="part-card-info")
-                  h3!= part.name
-                  p
-                    strong Company: 
-                    | #{part.company}
-                  p $#{part.price}
-                  p(class="part-number") Part #  !{part.sku}
-                a(class="part-card-link" href="/part/"+part.slug) VIEW PART
+    h2(class="category-detail-heading") Parts in !{category.name}
+    div(class="parts-container")
+        each part in category_parts
+          div(class="part-card")
+            div(class="part-card-inner")
+          
+              a(class="part-card-image-link" href="/part/"+part.slug)
+                img(src=`/images/uploads/${part.image}`, alt=`${part.company + " " + part.name + " product image"}` )
+              div(class="part-card-info")
+                h3!= part.name
+                p
+                  strong Company: 
+                  | #{part.company}
+                p 
+                  strong Price: 
+                  | $#{part.price}
+                p(class="part-number")
+                  strong Part # 
+                  | !{part.sku}
+              a(class="part-card-link" href="/part/"+part.slug) VIEW PART
 
     hr
     div(class="update-delete-link-container")

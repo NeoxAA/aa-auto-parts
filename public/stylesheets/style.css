@@ -20,7 +20,7 @@ html {
 }
 
 h2 {
-    font-size: 3.2rem;
+    font-size: 2.8rem;
 }
 
 h2.category-heading {
@@ -124,7 +124,7 @@ img {
 
 .parts-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px,400px));
     width: 100%;
     gap: 2rem;
 }
@@ -180,6 +180,7 @@ a.part-card-link {
     font-weight: 700;
     transition: 0.3s ease-in-out all;
     margin-top: auto;
+    font-size: 1.7rem;
 }
 
 a.part-card-link:hover {
@@ -256,7 +257,7 @@ button.submit-button {
     background: var(--primary-color);
     border: solid 1px var(--primary-color);
     line-height: 1;
-    padding: 0.7rem 0;
+    padding: 1rem 2rem;
     text-align: center;
     cursor: pointer;
     font-family: inherit;
@@ -311,10 +312,19 @@ form ul {
 
 hr {
     margin-bottom: 2rem;
+    margin-top: 4rem;
 }
 
 .part-detail-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
     align-items: center;
+}
+
+.part-detail-info h1 {
+    margin-bottom: 0;
+}
+
+span.part-detail-category-span:not(:last-child):after {
+    content: ", ";
 }
