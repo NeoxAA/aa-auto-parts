@@ -26,6 +26,7 @@ exports.category_detail = asyncHandler(async (req, res, next) => {
     const partsInCategory = await Part.find({ category: category._id}, "name image company price sku slug").exec();
 
     res.render('category_detail', {
+        title: category.name,
         category: category,
         category_parts: partsInCategory,
     });

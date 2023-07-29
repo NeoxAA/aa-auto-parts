@@ -8,6 +8,10 @@ html(lang='en')
     link(rel="preconnect" href="https://fonts.googleapis.com")
     link(rel="preconnect" href="https://fonts.gstatic.com" crossorigin)
     link(href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet")
+    link(rel="apple-touch-icon" sizes="180x180" href="/images/uploads/apple-touch-icon.png")
+    link(rel="icon" type="image/png" sizes="32x32" href="/images/uploads/favicon-32x32.png")
+    link(rel="icon" type="image/png" sizes="16x16" href="/images/uploads/favicon-16x16.png")
+    link(rel="manifest" href="/images/uploads/site.webmanifest")
   body
     header(class="header")
       div(class="header-container")
@@ -16,6 +20,8 @@ html(lang='en')
         ul(class="header-menu")
           li(class="header-menu-item")
             a(href="/") Home
+          li(class="header-menu-item")
+            a(href="/category/") View Categories
         ul(class="header-menu controls-menu")
           li(class="header-menu-item")
             a(href="/part/create") Create Part
@@ -23,3 +29,5 @@ html(lang='en')
             a(href="/category/create") Create Category
     main(class='main-container')
           block content
+    footer(class="footer")
+      p Created by Asam Afzal
