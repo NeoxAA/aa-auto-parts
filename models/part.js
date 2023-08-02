@@ -25,4 +25,5 @@ PartsSchema.virtual("url").get(function () {
     return `/part/${this.slug}`;
   });
 
+  
 module.exports = mongoose.model("Part", PartsSchema)
